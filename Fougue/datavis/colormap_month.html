@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="d3.js"></script>
+		<style type="text/css">
+			/* No style rules here yet */		
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 8300;
+			var h = 1200;
+			var padding = 80;
+			
+			var dataset, xScale, yScale, xAxis, yAxis;  //Empty, for now
+
+            var parseTime = d3.timeParse("%Y-%m-%d");
+
+            var formatTime = d3.timeFormat("%b %e");
+		
+            //Function for converting CSV values from strings to Dates and numbers
+            let svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h)
+            
+			var rowConverter = function(d) {
+				return {
+                    id: parseTime(d.date),
+                    Year: parseTime(d.date).getFullYear(),
+                    Month: parseTime(d.date).getMonth(),
+                    size: parseInt((d.x * d.y)/100) ,
+                    One: d.color1,
+                    Two: d.color2,
+                    Three: d.color3,
+                    Four: d.color4,
+                    Five: d.color5
+				};
+            }
+           
+
+
+            d3.csv("master.csv", rowConverter, function(data) {
+                    dataset = data;
+                    console.log(dataset);
+
+                    
+
+
+                    // console.log(startDate)
+
+                    setScale();
+                    setAxis();
+                    makeChart();
+                    
+            });
+            
+            function findColors(){
+                var oneTop = d3.max(dataset, (d)=> { return d.One; }); 
+                var oneB = d3.min(dataset, (d)=> { return d.One; }); 
+
+                var twoTop = d3.max(dataset, (d)=> { return d.Two; }); 
+                var twoB = d3.min(dataset, (d)=> { return d.Two; }); 
+
+                var threeTop = d3.max(dataset, (d)=> { return d.Three; }); 
+                var threeB = d3.min(dataset, (d)=> { return d.Three; }); 
+
+                var fourTop = d3.max(dataset, (d)=> { return d.Four; }); 
+                var fourB = d3.min(dataset, (d)=> { return d.Four; }); 
+
+                var top = d3.max([oneTop, twoTop, threeTop, fourTop]); 
+                var bottom = d3.min([oneB, twoB, threeB, fourB]); 
+
+                var p = [top, bottom]
+                return p;
+            }
+
+
+            function setScale(){
+
+                var yStart = d3.min(dataset, (d)=>{ return d.Month; });
+                var yEnd = d3.max(dataset, (d)=>{ return d.Month+1; });
+
+
+                var xStart = d3.min(dataset, (d)=> { return d.Year; }); 
+                var xEnd = d3.max(dataset, (d)=> { return d.Year; }); 
+
+                console.log(xStart)
+                console.log(xEnd)
+    
+                var p = findColors()
+
+                console.log(p)
+    
+                var pStart = d3.max(dataset, (d)=> { return d.p; }); 
+                var pEnd = d3.min(dataset, (d)=> { return d.p; }); 
+    
+                xScale = d3.scaleLinear()
+                    .domain([1892, 2013])
+                    .range([padding, w - padding]);
+    
+                yScale = d3.scaleLinear()
+                    .domain([yStart, yEnd])
+                    .range([h - padding, padding]);
+                
+                pScale = d3.scaleLinear()
+                    .domain([pStart, pEnd])
+                    .range(["orange", "black"]);
+            };
+               
+            function setAxis(){
+
+        // svg.append("text")
+        //         .attr("x", (w - padding - padding*2) / 3.25)
+        //         .attr("y", padding *2)
+        //         .style("font-size", "24px")
+        //         .text("scatterplot");
+
+                let yAxis = d3.axisLeft()
+                                .scale(yScale)
+                                .ticks(12);
+
+                let xAxis = d3.axisBottom()
+                                .scale(xScale)
+                                .ticks(83);
+
+                    
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(" + padding + ",0)")
+                    .call(yAxis);
+
+
+
+                svg.append("g")
+                    .attr("class", "axis")
+                    .attr("transform", "translate(0," + (h - padding) + ")")
+                    .call(xAxis);
+
+                svg.append("text")
+                    .attr("x", (w - padding )/2)
+                    .attr("y", h - 5)
+                    .text("Year");
+                };
+
+
+            function makeChart(){
+
+                var months = [ "January", "February", "March", "April", "May", "June", 
+           "July", "August", "September", "October", "November", "December" ];
+
+                // var circles = svgContainer.selectAll("g")
+                                
+           
+                svg.selectAll("circle")
+				   .data(dataset)
+				   .enter()
+				   .append("circle")
+				   .attr("cx", function(d) {
+				   		return xScale(d.Year);
+				   })
+				   .attr("cy", function(d) {
+				   		return yScale(d.Month +1);
+				   })
+				   .attr("r", 33)
+                   .attr("fill", function(d) {
+                        
+				   		return d.Five;
+				   });
+
+
+                
+            };
+
+		</script>
+	</body>
+</html>
