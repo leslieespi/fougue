@@ -1,1 +1,8 @@
 # Fougue
+
+
+With the rise of technology and  big data, industry and creativity can open new doors and reach for new limits. Anything from healthcare to sports to vehicles use machine learning now a days in order to enhance their performance and push the industry forward. As a branch of Artificial Intelligence and computer science, using algorithms and data to mimic thinking to some extent and discover new ways to learn from the exponential growth of data access almost impossible to analyze and utilize by people. The fashion industry in today’s world is a twelve billion dollar business in the United States that drives work within film, photography, retail, and the media. With the millions of archives and photography, the use of machine learning to reflect on the history of clothing and trends that could inspire new ideas and bring back old ones. Although trends change on a daily basis, data and numbers will not, and engaging with the big picture through the machine learning field such as Neural Networks for object detection and categorizing trends from the past to learn for the future. Due to the nature of high fashion, trends are recycled every few years and identifying such trends could be beneficial to the lower end of the fashion industry by producing trendy items that will continue to match characteristics of the trending styles. Color and material play a huge role in fashion throughout seasons that could be identified through computational algorithms such as neural networks on existing fashion photography. This project utilizes object identifying methods and computer vision to analyze the front covers of vogue throughout history and lays out observations in D3 visualizations.
+
+
+
+
